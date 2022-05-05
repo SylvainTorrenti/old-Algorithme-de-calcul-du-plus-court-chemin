@@ -1,21 +1,21 @@
 <?php
 
-global $shortestPath; 
+global $shortestPath;
 //la map
-class Map 
+class Map  
 {
     private $map = [
-        [1,1,1,1,1],
-        [1,1,0,0,1],
-        [0,1,1,0,1],
-        [0,1,1,1,1],
-        [1,1,0,1,1],
-        [1,1,1,1,0],
+        [1, 1, 1, 1, 1],
+        [1, 1, 0, 0, 1],
+        [0, 1, 1, 0, 1],
+        [0, 1, 1, 1, 1],
+        [1, 1, 0, 1, 1],
+        [1, 1, 1, 1, 0],
     ];
 
-       /**
+    /**
      * Get the value of map
-     */ 
+     */
     public function getMap()
     {
         return $this->map;
@@ -26,23 +26,23 @@ class Map
 //points autour du currentpoint
 class Point
 {
-    private $points;
-    private $currentPoint;
+    public $points;
+    public $currentPoint;
 
     public function __construct($currentPoint)
     {
         $this->currentPoint = $currentPoint;
     }
 
-    
+
     /**
      * Get the value of points
-     */ 
-    public function getPoints()
+     */
+    public function getPoints() 
     {
-        $points = [
+        $this->points = [
             [$this->currentPoint[0] - 1, $this->currentPoint[1]],
-            [$this->currentPoint[0] + 1,$this->currentPoint[1]],
+            [$this->currentPoint[0] + 1, $this->currentPoint[1]],
             [$this->currentPoint[0], $this->currentPoint[1] - 1],
             [$this->currentPoint[0], $this->currentPoint[1] + 1],
         ];
@@ -53,12 +53,12 @@ class Point
      * Set the value of points
      *
      * @return  self
-     */ 
+     */
     public function setPoints($points)
     {
         $points = [
             [$this->currentPoint[0] - 1, $this->currentPoint[1]],
-            [$this->currentPoint[0] + 1,$this->currentPoint[1]],
+            [$this->currentPoint[0] + 1, $this->currentPoint[1]],
             [$this->currentPoint[0], $this->currentPoint[1] - 1],
             [$this->currentPoint[0], $this->currentPoint[1] + 1],
         ];
@@ -68,7 +68,7 @@ class Point
     }
 }
 // recupération du trajet
-class MapPath 
+class MapPath
 {
 
     private $map;
@@ -80,54 +80,57 @@ class MapPath
 
     public function __construct($map, array $start, array $end, array $currentPath)
     {
-            $this->map = $map;
-            $this->start = $start;
-            $this->end = $end;
-            $this->currentPath = $currentPath;
+        $this->map = $map;
+        $this->start = $start;
+        $this->end = $end;
+        $this->currentPath = $currentPath;
     }
 
-    
+
     public function do($map, $start, $end, $currentPath)
     {
         $currentPath[] = $start;
         if (!empty($shortestPath) && count($currentPath) >= count($shortestPath)) {
-            
             return;
         }
         //si le point actuel = à l'arrivée alors le chemin le plus court = le chemin actuel
         if ($start[0] == $end[0] && $start[1] == $end[1]) {
             $shortestPath = $currentPath;
-            
             return;
         }
-        $points = new Point($start);
-        // var_dump($this->points);
-        // die;
 
-        // foreach ($this->points->setPoints($this->start) as $point) {
+        //creation des points aux alentours pour connaître leur valeur.
+        $points = new Point($start);
+        $points->getPoints();
+        echo '<pre>';
+        // echo gettype($points);
+        // var_dump($points);
+        echo '<pre>';
+        
         foreach ($points as $point) {
-            // var_dump($point);
-        //si x ou y est négatifs ou si x ou u sors de la map tu continue 
-        if ($point[0] < 0 || $point[1] < 0 || $point[0] >= count($map) || $point[1] >= count($map[0])) {
-            continue;
-        }
-        //si le point est égale à 0 tu continue
-        if (0 == $map[$point[0]][$point[1]]) {
-            continue;
-        }
-        //si le point est déjà dans le trajet tu continue
-        if (in_array($point, $currentPath)) {
-            continue;
-        }
-        $this->do($map, $point, $end, $currentPath);
+            var_dump($point);
+            //si x ou y est négatifs ou si x ou u sors de la map tu continue 
+            if ($point[0] < 0 || $point[1] < 0 || $point[0] >= count(array($map)) || $point[1] >= count($map[0])) {
+                continue;
+            }
+            //si le point est égale à 0 tu continue
+            if (0 == $map[$point[0]][$point[1]]) {
+                continue;
+            }
+            //si le point est déjà dans le trajet tu continue
+            if (in_array($point, $currentPath)) {
+                continue;
+            }
+
+            $this->do($map, $point, $end, $currentPath);
         }
     }
 }
 
 
 
-$start = [2,4];
-$end   = [1,0];
+$start = [2, 4];
+$end   = [1, 0];
 $map = new Map();
 $map->getMap();
 $mapPath = new MapPath($map, $start, $end, []);
@@ -147,7 +150,7 @@ foreach ($mapPath as $r => $row) {
                 case 0:
                     echo 'D';
                     break;
-                case count($shortestPath)-1:
+                case count($shortestPath) - 1:
                     echo 'A';
                     break;
                 default:
@@ -160,7 +163,4 @@ foreach ($mapPath as $r => $row) {
         echo '|';
     }
     echo PHP_EOL;
-
- 
-
 }
