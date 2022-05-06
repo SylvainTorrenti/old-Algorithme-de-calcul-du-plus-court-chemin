@@ -12,7 +12,7 @@ $map->getMap();
 $mapPath = new MapPath($map, $start, $end, []);
 $mapPath->do($map, $start, $end, []);
 echo '<pre>';
-// var_dump($mapPath);
+var_dump($mapPath);
 echo '<pre>';
 
 // Display result
