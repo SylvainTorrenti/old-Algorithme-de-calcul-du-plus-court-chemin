@@ -1,24 +1,30 @@
 <?php
 require_once 'Map/Map.php';
-require_once 'PointAround/Point.php';
-require_once 'MapPath/MapPath.php';
+require_once 'Point/Point.php';
+require_once 'Path/Path.php';
 
-global $shortestPath;
 
-$start = [2, 4];
-$end   = [1, 0];
+$shortestPath = [];
+
+$start = new Point(2,4);
+$start->getPoint(2,4);
+
+$end = new Point(1,0);
+$end->getPoint(1,0);
 $map = new Map();
 $map->getMap();
-$mapPath = new MapPath($map, $start, $end, []);
-$mapPath->do($map, $start, $end, []);
+$path = new Path($map, $start, $end, []);
+// $mapPath->do($map, $start, $end, []);
 echo '<pre>';
-var_dump($mapPath);
+// var_dump($path);
+// var_dump($mapPath);
+// var_dump($shortestPath);
 echo '<pre>';
 
 // Display result
-foreach (array($mapPath) as $r => $row) {
+foreach (array($path) as $r => $row) {
     echo '|';
-    // var_dump($row);
+    var_dump($row);
     foreach (array($row) as $c => $cell) {
         // var_dump($shortestPath);
         if (($pos = array_search([$r, $c], $shortestPath)) !== false) {
