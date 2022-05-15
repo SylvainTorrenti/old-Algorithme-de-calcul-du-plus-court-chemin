@@ -26,7 +26,7 @@ class Path
      */ 
     public function getCurrentPath()
     {
-        // $currentPoint = new Point();
+        $currentPoint = new Point();
         $currentPath[] = $currentPoint;
         if (!empty($shortestPath) && count($currentPath) >= count($shortestPath)) {
             return;
